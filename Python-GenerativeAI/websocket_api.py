@@ -7,6 +7,7 @@ import shutil
 import argparse
 import os
 
+# 프롬프트 클래스
 class prompt_settings:
     def __init__(self, prompt, args):
         self.prompt = prompt
@@ -96,10 +97,12 @@ def main():
     parser.add_argument('--negative', type=str, default="", help="Negative prompt")
     parser.add_argument('--seed', type=int, default=1, help="Seed")
     parser.add_argument('--comfy_path', type=str, default="E:/generativeAI/ComfyUI-Desktop/ComfyUI", help="ComfyUI path")
-    parser.add_argument('--output_path', type=str, default="E:/unityproject/Generative_AI_Pipeline/GenerativeAI/Assets/StreamingAssets", help="Output path")
+    parser.add_argument('--output_path', type=str, default="E:/unityproject/RealTimeXGenerativeAI/GenerativeAI/Assets/StreamingAssets", help="Output path")
+    parser.add_argument('--workflow', type=str, default="basicT2I.json", help="Workflow file")
     args = parser.parse_args()
 
-    with open('workflow.json', 'r', encoding='utf-8') as file:
+    workflow_path = os.path.join('./workflows', args.workflow)
+    with open(workflow_path, encoding='utf-8') as file:
         prompt = file.read()
     comfy_prompt = prompt_settings(prompt, args)
     comfy_prompt.run()

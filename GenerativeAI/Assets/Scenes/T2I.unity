@@ -165,7 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   comfyPath: E:/generativeAI/ComfyUI-Desktop/ComfyUI
   comfyServer: 127.0.0.1:8000
-  outputPath: E:/unityproject/Generative_AI_Pipeline/GenerativeAI/Assets/StreamingAssets
+  outputPath: E:/unityproject/RealTimeXGenerativeAI/GenerativeAI/Assets/StreamingAssets
   positivePrompt: {fileID: 462874163}
   negativePrompt: {fileID: 1574645495}
   positive: 2 girl, masterpiece, beautiful sky, best quality

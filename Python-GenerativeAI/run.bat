@@ -6,4 +6,5 @@ set negative="worst quality"
 set seed=31690
 set output_path="E:/unityproject/Generative_AI_Pipeline/GenerativeAI/Assets/StreamingAssets"
 set comfy_path="E:/generativeAI/ComfyUI-Desktop/ComfyUI"
-python websocket_api.py --server %server% --positive %positive% --negative %negative% --seed %seed% --comfy_path %comfy_path% --output_path %output_path%
+set workflow = "bacicT2I.json"
+python websocket_api.py --server %server% --positive %positive% --negative %negative% --seed %seed% --comfy_path %comfy_path% --output_path %output_path% --basicT2I %workflow%
