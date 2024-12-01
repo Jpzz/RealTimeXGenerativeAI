@@ -1,10 +1,9 @@
 @echo off
 call genAI\Scripts\activate.bat
 set server="127.0.0.1:8000"
-set positive="1 girl, on the beach, beautiful sky, afternoon, cinematic lighting, master piece"
-set negative="worst quality"
-set seed=31690
-set output_path="E:/unityproject/Generative_AI_Pipeline/GenerativeAI/Assets/StreamingAssets"
+set seed=26247
+set output_path="E:/unityproject/RealTimeXGenerativeAI/GenerativeAI/Assets/StreamingAssets"
 set comfy_path="E:/generativeAI/ComfyUI-Desktop/ComfyUI"
-set workflow = "bacicT2I.json"
-python websocket_api.py --server %server% --positive %positive% --negative %negative% --seed %seed% --comfy_path %comfy_path% --output_path %output_path% --basicT2I %workflow%
+set equipments="axe"
+set controlnet_image="axe_controlnet.png"
+python websocket_api_item.py --server %server% --seed %seed% --comfy_path %comfy_path% --output_path %output_path% --equipments %equipments% --controlnet_image %controlnet_image%

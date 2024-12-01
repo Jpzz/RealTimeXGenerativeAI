@@ -1,0 +1,500 @@
+{
+  "4": {
+    "inputs": {
+      "ckpt_name": "epicrealismXL_vx1Finalkiss.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "6": {
+    "inputs": {
+      "text": [
+        "47",
+        0
+      ],
+      "clip": [
+        "4",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "POSITIVE PROMPT"
+    }
+  },
+  "7": {
+    "inputs": {
+      "text": "nude, nsfw, lowresolution, worst quality",
+      "clip": [
+        "4",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "NEGATIVE PROMPT"
+    }
+  },
+  "13": {
+    "inputs": {
+      "switch_1": "On",
+      "lora_name_1": "sdxl\\game_icon_diablo_style.safetensors",
+      "model_weight_1": 0.8,
+      "clip_weight_1": 1,
+      "switch_2": "On",
+      "lora_name_2": "sdxl\\pixel-art-xl-v1.1.safetensors",
+      "model_weight_2": 0.8,
+      "clip_weight_2": 1,
+      "switch_3": "Off",
+      "lora_name_3": "None",
+      "model_weight_3": 1,
+      "clip_weight_3": 1
+    },
+    "class_type": "CR LoRA Stack",
+    "_meta": {
+      "title": "💊 CR LoRA Stack"
+    }
+  },
+  "14": {
+    "inputs": {
+      "lora_name": "SDXL-Lightning\\sdxl_lightning_8step_lora.safetensors",
+      "strength_model": 1,
+      "strength_clip": 1,
+      "model": [
+        "15",
+        0
+      ],
+      "clip": [
+        "15",
+        1
+      ]
+    },
+    "class_type": "Load Lora",
+    "_meta": {
+      "title": "Load Lora"
+    }
+  },
+  "15": {
+    "inputs": {
+      "model": [
+        "4",
+        0
+      ],
+      "clip": [
+        "4",
+        1
+      ],
+      "lora_stack": [
+        "13",
+        0
+      ]
+    },
+    "class_type": "CR Apply LoRA Stack",
+    "_meta": {
+      "title": "💊 CR Apply LoRA Stack"
+    }
+  },
+  "16": {
+    "inputs": {
+      "model": [
+        "14",
+        0
+      ],
+      "clip": [
+        "14",
+        1
+      ],
+      "vae": [
+        "4",
+        2
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ]
+    },
+    "class_type": "ToBasicPipe",
+    "_meta": {
+      "title": "ToBasicPipe"
+    }
+  },
+  "19": {
+    "inputs": {
+      "control_net_name": "SDXL\\controlnet-scribble-sdxl-1.0\\diffusion_pytorch_model.safetensors"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "Load ControlNet Model"
+    }
+  },
+  "20": {
+    "inputs": {
+      "strength": 1,
+      "start_percent": 0,
+      "end_percent": 1,
+      "positive": [
+        "22",
+        3
+      ],
+      "negative": [
+        "22",
+        4
+      ],
+      "control_net": [
+        "19",
+        0
+      ],
+      "image": [
+        "21",
+        0
+      ],
+      "vae": [
+        "22",
+        2
+      ]
+    },
+    "class_type": "ControlNetApplyAdvanced",
+    "_meta": {
+      "title": "Apply ControlNet"
+    }
+  },
+  "21": {
+    "inputs": {
+      "image": "ComfyUI_temp_ifpop_00002_.png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "22": {
+    "inputs": {
+      "basic_pipe": [
+        "16",
+        0
+      ]
+    },
+    "class_type": "FromBasicPipe",
+    "_meta": {
+      "title": "FromBasicPipe"
+    }
+  },
+  "24": {
+    "inputs": {
+      "model": [
+        "22",
+        0
+      ],
+      "clip": [
+        "22",
+        1
+      ],
+      "vae": [
+        "22",
+        2
+      ],
+      "positive": [
+        "20",
+        0
+      ],
+      "negative": [
+        "20",
+        1
+      ]
+    },
+    "class_type": "ToBasicPipe",
+    "_meta": {
+      "title": "ToBasicPipe"
+    }
+  },
+  "27": {
+    "inputs": {
+      "basic_pipe": [
+        "24",
+        0
+      ]
+    },
+    "class_type": "FromBasicPipe",
+    "_meta": {
+      "title": "FromBasicPipe"
+    }
+  },
+  "28": {
+    "inputs": {
+      "seed": 146925055008138,
+      "steps": 8,
+      "cfg": 1.3,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "27",
+        0
+      ],
+      "positive": [
+        "27",
+        3
+      ],
+      "negative": [
+        "27",
+        4
+      ],
+      "latent_image": [
+        "30",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "30": {
+    "inputs": {
+      "width": 512,
+      "height": 512,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image"
+    }
+  },
+  "31": {
+    "inputs": {
+      "samples": [
+        "28",
+        0
+      ],
+      "vae": [
+        "27",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "32": {
+    "inputs": {
+      "output_path": "[time(%Y-%m-%d)]",
+      "filename_prefix": "ComfyUI",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "png",
+      "dpi": 300,
+      "quality": 100,
+      "optimize_image": "true",
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "true",
+      "embed_workflow": "true",
+      "show_previews": "true",
+      "images": [
+        "31",
+        0
+      ]
+    },
+    "class_type": "Image Save",
+    "_meta": {
+      "title": "Image Save"
+    }
+  },
+  "36": {
+    "inputs": {
+      "text": "gold\nmetal\nice\nfire\nlight\ndarkness\nwind\nthunder"
+    },
+    "class_type": "Text Multiline",
+    "_meta": {
+      "title": "Element Style Prompt"
+    }
+  },
+  "37": {
+    "inputs": {
+      "text": "demon design\ndragon design\nangel design\nskeleton design\nknight design\n"
+    },
+    "class_type": "Text Multiline",
+    "_meta": {
+      "title": "Text Multiline"
+    }
+  },
+  "38": {
+    "inputs": {
+      "string": "shield"
+    },
+    "class_type": "String to Text",
+    "_meta": {
+      "title": "Equipment String"
+    }
+  },
+  "39": {
+    "inputs": {
+      "delimiter": ", ",
+      "clean_whitespace": "true",
+      "text_a": [
+        "38",
+        0
+      ],
+      "text_b": [
+        "40",
+        0
+      ],
+      "text_c": [
+        "41",
+        0
+      ]
+    },
+    "class_type": "Text Concatenate",
+    "_meta": {
+      "title": "Text Concatenate"
+    }
+  },
+  "40": {
+    "inputs": {
+      "text": [
+        "36",
+        0
+      ],
+      "seed": 1062152201791521
+    },
+    "class_type": "Text Random Line",
+    "_meta": {
+      "title": "Text Random Line"
+    }
+  },
+  "41": {
+    "inputs": {
+      "text": [
+        "37",
+        0
+      ],
+      "seed": 1081313519027069
+    },
+    "class_type": "Text Random Line",
+    "_meta": {
+      "title": "Text Random Line"
+    }
+  },
+  "45": {
+    "inputs": {
+      "prompt": "(pixel art:1.1), cartoon illustration"
+    },
+    "class_type": "CR Prompt Text",
+    "_meta": {
+      "title": "Pixel Prompt"
+    }
+  },
+  "46": {
+    "inputs": {
+      "prompt": "simple solid black background, game icon"
+    },
+    "class_type": "CR Prompt Text",
+    "_meta": {
+      "title": "Background Prompt"
+    }
+  },
+  "47": {
+    "inputs": {
+      "delimiter": ", ",
+      "clean_whitespace": "true",
+      "text_a": [
+        "45",
+        0
+      ],
+      "text_b": [
+        "39",
+        0
+      ],
+      "text_c": [
+        "46",
+        0
+      ]
+    },
+    "class_type": "Text Concatenate",
+    "_meta": {
+      "title": "Text Concatenate"
+    }
+  },
+  "58": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "scale_by": 2,
+      "samples": [
+        "28",
+        0
+      ]
+    },
+    "class_type": "LatentUpscaleBy",
+    "_meta": {
+      "title": "Upscale Latent By"
+    }
+  },
+  "62": {
+    "inputs": {
+      "basic_pipe": [
+        "24",
+        0
+      ]
+    },
+    "class_type": "FromBasicPipe",
+    "_meta": {
+      "title": "FromBasicPipe"
+    }
+  },
+  "63": {
+    "inputs": {
+      "seed": 167719967390291,
+      "steps": 8,
+      "cfg": 1.1,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 0.5,
+      "model": [
+        "62",
+        0
+      ],
+      "positive": [
+        "62",
+        3
+      ],
+      "negative": [
+        "62",
+        4
+      ],
+      "latent_image": [
+        "58",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "64": {
+    "inputs": {
+      "samples": [
+        "63",
+        0
+      ],
+      "vae": [
+        "62",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  }
+}

@@ -8,7 +8,7 @@ import argparse
 import os
 
 # 프롬프트 클래스
-class prompt_settings:
+class prompt_settings_basicT2I:
     def __init__(self, prompt, args):
         self.prompt = prompt
         self.args = args
@@ -104,7 +104,7 @@ def main():
     workflow_path = os.path.join('./workflows', args.workflow)
     with open(workflow_path, encoding='utf-8') as file:
         prompt = file.read()
-    comfy_prompt = prompt_settings(prompt, args)
+    comfy_prompt = prompt_settings_basicT2I(prompt, args)
     comfy_prompt.run()
 
     image_path = os.path.join(args.comfy_path, comfy_prompt.folder_type, comfy_prompt.subfolder, comfy_prompt.filename)

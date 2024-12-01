@@ -6,6 +6,7 @@ using System.Collections;
 
 public class ExecuteComfyUI : MonoBehaviour
 {
+    [Header("Variables")]
     public Config config;
     public RawImage rawImage;
     /// <summary>
@@ -30,7 +31,11 @@ public class ExecuteComfyUI : MonoBehaviour
     /// <param name="filePath"></param>
     private IEnumerator LoadImageCoroutine(string filePath)
     {
-        yield return new WaitForSeconds(1f);
+        string[] beforeFiles = Directory.GetFiles(Application.streamingAssetsPath);
+        while(Directory.GetFiles(Application.streamingAssetsPath).Length <= beforeFiles.Length)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
         LoadImage(filePath);
     }
     /// <summary>
