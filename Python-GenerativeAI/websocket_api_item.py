@@ -3,9 +3,11 @@ import uuid
 import json
 import urllib.request
 import urllib.parse
-import shutil
 import argparse
 import os
+import datetime
+from utils import *
+import random
 
 # 프롬프트 클래스
 class prompt_settings_items:
@@ -74,9 +76,12 @@ class prompt_settings_items:
     def set(self):
         self.workflow = json.loads(self.prompt)
         # Set the seed for our KSampler node
-        self.workflow['28']["inputs"]["seed"] = self.args.seed
-        self.workflow['38']["inputs"]["string"] = self.args.equipments
-        self.workflow['21']["inputs"]["image"] = self.args.controlnet_image
+        self.workflow['84']["inputs"]["seed"] = self.args.seed
+        self.workflow['92']["inputs"]["seed"] = self.args.seed
+        self.workflow['98']["inputs"]["string"] = self.args.equipments
+        self.workflow['102']["inputs"]["seed"] = random.randint(0, 2147483647)
+        self.workflow['103']["inputs"]["seed"] = random.randint(0, 2147483647)
+        self.workflow['78']["inputs"]["image"] = os.path.normpath(os.path.join('controlnet', self.args.controlnet_image))
         
     def run(self):
         ws = websocket.WebSocket()
@@ -84,9 +89,6 @@ class prompt_settings_items:
         self.set()
         images = self.get_images(ws, self.workflow)
         ws.close()
-
-def copy_images(image_path, output_path):
-    shutil.copy2(image_path, output_path)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -99,22 +101,35 @@ def main():
     parser.add_argument('--equipments', type=str, default="sword", help="Equipments")
     
     args = parser.parse_args()
-    controlnet_img = os.path.normpath(os.path.join(args.output_path, 'ControlNet',args.controlnet_image))
-    target_controlnet_img = os.path.normpath(os.path.join(args.comfy_path, 'input', args.controlnet_image))
+
+    if not os.path.exists( os.path.normpath(os.path.join(args.comfy_path, 'input/controlnet'))):
+        os.makedirs(os.path.normpath(os.path.join(args.comfy_path, 'input/controlnet')))
+
+    # Copy ControlNet Image Unity to ComfyUI
+    controlnet_img = os.path.normpath(os.path.join(args.output_path, 'ControlNet',args.controlnet_image))    
+    target_controlnet_img = os.path.normpath(os.path.join(args.comfy_path, 'input/controlnet', args.controlnet_image))
     print('controlnet_img : {}'.format(controlnet_img))
     print('target_controlnet_img : {}'.format(target_controlnet_img))
     copy_images(controlnet_img, target_controlnet_img)
 
+    # Run ComfyUI
     workflow_path = os.path.join('./workflows', args.workflow)
     with open(workflow_path, encoding='utf-8') as file:
         prompt = file.read()
     comfy_prompt = prompt_settings_items(prompt, args)
     comfy_prompt.run()
 
-    image_path = os.path.normpath(os.path.join(args.comfy_path, comfy_prompt.folder_type, comfy_prompt.subfolder, comfy_prompt.filename))
-    output_path = os.path.normpath(os.path.join(args.output_path, comfy_prompt.filename))
+    # Generate Today Folder
+    today = datetime.datetime.now().strftime("%Y%m%d")
+    today_path = os.path.normpath(os.path.join(args.output_path, 'GEN', today))
+    if not os.path.exists(today_path):
+        os.makedirs(today_path)
 
-    copy_images(image_path, output_path)
+    tracking_folder = os.path.normpath(os.path.join(args.comfy_path, comfy_prompt.folder_type, comfy_prompt.subfolder))
+    # Copy Generated Image from ComfyUI to Unity
+    image_path = os.path.normpath(os.path.join(args.comfy_path, comfy_prompt.folder_type, comfy_prompt.subfolder, comfy_prompt.filename))
+    output_path = os.path.normpath(os.path.join(args.output_path, 'GEN', today, comfy_prompt.filename))
+    monitor_folder(tracking_folder, copy_images(image_path, output_path), 0.5)
 
 if __name__ == "__main__":
     main()
