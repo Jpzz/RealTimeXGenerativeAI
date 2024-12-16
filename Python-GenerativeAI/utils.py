@@ -17,10 +17,7 @@ def merge_rgb_alpha(rgb_path, alpha_path, output_path):
     if alpha_img is None:
         print(f"알파 이미지를 불러오는데 실패했습니다: {alpha_path}")
         return
-
-    # BGR에서 RGBA로 변환
-    rgb = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2RGB)
-    rgba = cv2.cvtColor(rgb, cv2.COLOR_RGB2RGBA)
+    rgba = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2BGRA)
     
     # 알파 채널에 마스크 할당
     rgba[:, :, 3] = alpha_img
@@ -48,5 +45,6 @@ def monitor_folder(folder_path, callback_fn, check_interval=0.5):
         changed, current_count = check_folder_changes(folder_path, last_count)
         if changed:
             callback_fn()
+            print('Execute Callback Function')
             last_count = current_count
         time.sleep(check_interval)

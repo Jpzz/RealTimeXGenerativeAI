@@ -13,9 +13,7 @@ public class ItemPixel : MonoBehaviour
     public RawImage guideCanvas;
     public Texture2D[] armorIMGs;
     public Texture2D[] swordIMGs;
-    public Texture2D[] axeIMGs;
-    public Texture2D[] beltIMGs;
-    public Texture2D[] helmetIMGs;
+    public Texture2D[] shieldIMGs;
     public Texture2D[] bootsIMGs;
     public Texture2D[] glovesIMGs;
     public Texture2D[] pantsIMGs;
@@ -28,9 +26,7 @@ public class ItemPixel : MonoBehaviour
     {
         itemIMGs.Add("armor", armorIMGs);
         itemIMGs.Add("sword", swordIMGs);
-        itemIMGs.Add("axe", axeIMGs);
-        itemIMGs.Add("belt", beltIMGs);
-        itemIMGs.Add("helmet", helmetIMGs);
+        itemIMGs.Add("shield", shieldIMGs);
         itemIMGs.Add("boots", bootsIMGs);
         itemIMGs.Add("gloves", glovesIMGs);
         itemIMGs.Add("pants", pantsIMGs);

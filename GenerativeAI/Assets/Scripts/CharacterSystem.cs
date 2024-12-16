@@ -6,7 +6,7 @@ public class CharacterSystem : MonoBehaviour
 {
     public enum Equipments
     {
-        Helmet, Armor, Belts, Pants, Boots, Weapon, Gloves
+        Armor, Pants, Boots, Weapon, Gloves, Shield
     }
     public enum Direction
     {
@@ -22,6 +22,11 @@ public class CharacterSystem : MonoBehaviour
     public Slider scaleSlider;
     public Slider rotationSlider;
     public ExecuteComfyUI executeComfyUI;
+    
+    [Header("Scale and Rotation")]
+    public float maxScale;
+    public Vector2 cropPos;
+    public Vector2 cropSize;
     void Start()
     {
         DeligateButtonFunction();
@@ -56,24 +61,21 @@ public class CharacterSystem : MonoBehaviour
     }
     private void MatchEquipment(string name)
     {
-        if (name.Contains("helmet"))
-            equipment = Equipments.Helmet;
-        else if (name.Contains("armor"))
+        if (name.Contains("armor"))
             equipment = Equipments.Armor;
-        else if (name.Contains("belt"))
-            equipment = Equipments.Belts;
         else if (name.Contains("pants"))
             equipment = Equipments.Pants;  
         else if (name.Contains("boots"))
             equipment = Equipments.Boots;
         else if (name.Contains("sword"))
             equipment = Equipments.Weapon;
-        else if (name.Contains("axe"))
-            equipment = Equipments.Weapon;
         else if (name.Contains("gloves"))
             equipment = Equipments.Gloves;
+        else if (name.Contains("shield"))
+            equipment = Equipments.Shield;
     }
     #region Button Functions
+    
     public void MoveCharacterParts(Direction direction)
     {
         Vector2 movement = Vector2.zero;
@@ -106,7 +108,7 @@ public class CharacterSystem : MonoBehaviour
    
     public void ChangeScale()
     {
-        var scale = Remap(scaleSlider.value, 0f, 1f, 0f, 1.5f);
+        var scale = Remap(scaleSlider.value, 0f, 1f, 0f, maxScale);
         characterParts[(int)equipment].localScale = new Vector3(scale, scale, scale);
     }
     public void ChangeRotation()
@@ -118,5 +120,43 @@ public class CharacterSystem : MonoBehaviour
     private float Remap(float value, float from1, float to1, float from2, float to2)
     {
         return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
+    }
+
+    public void CaptureScreen()
+    {
+        string filePath = Application.streamingAssetsPath + "/ScreenShots" + string.Format("/{0}.png", System.DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
+        
+        // 스크린샷 해상도 설정 
+        int width = 1024;
+        int height = 1024;
+        
+        // 새로운 RenderTexture 생성
+        RenderTexture rt = new RenderTexture(width, height, 24);
+        // 현재 활성 카메라의 타겟 텍스처를 rt로 변경
+        Camera.main.targetTexture = rt;
+        
+        // 텍스처 생성
+        Texture2D screenShot = new Texture2D(width, height, TextureFormat.RGBA32, false);
+        
+        // 카메라 렌더링
+        Camera.main.Render();
+        
+        // 활성 RenderTexture를 방금 생성한 것으로 설정
+        RenderTexture.active = rt;
+        
+        // RenderTexture의 내용을 Texture2D에 읽어옴 (crop 영역만)
+        screenShot.ReadPixels(new Rect(cropPos.x, cropPos.y, cropSize.x, cropSize.y), 0, 0);
+        screenShot.Apply();
+        
+        // 카메라 설정 복구
+        Camera.main.targetTexture = null;
+        RenderTexture.active = null;
+        Destroy(rt);
+        
+        // PNG 파일로 저장
+        byte[] bytes = screenShot.EncodeToPNG();
+        Debug.Log(filePath);
+        System.IO.File.WriteAllBytes(filePath, bytes);
+        Destroy(screenShot);
     }
 }

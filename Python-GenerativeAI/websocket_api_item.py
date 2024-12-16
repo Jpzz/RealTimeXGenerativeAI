@@ -125,11 +125,17 @@ def main():
     if not os.path.exists(today_path):
         os.makedirs(today_path)
 
-    tracking_folder = os.path.normpath(os.path.join(args.comfy_path, comfy_prompt.folder_type, comfy_prompt.subfolder))
+
+    # tracking_folder = os.path.normpath(os.path.join(args.comfy_path, comfy_prompt.folder_type, comfy_prompt.subfolder))
     # Copy Generated Image from ComfyUI to Unity
     image_path = os.path.normpath(os.path.join(args.comfy_path, comfy_prompt.folder_type, comfy_prompt.subfolder, comfy_prompt.filename))
     output_path = os.path.normpath(os.path.join(args.output_path, 'GEN', today, comfy_prompt.filename))
-    monitor_folder(tracking_folder, copy_images(image_path, output_path), 0.5)
+    print('image_path : {}'.format(image_path))
+    print('output_path : {}'.format(output_path))
+    copy_images(image_path, output_path)
+    # print('tracking_folder : {}'.format(tracking_folder))
+    
+    # monitor_folder(tracking_folder, lambda: merge_rgb_alpha(image_path, output_path), 0.5)
 
 if __name__ == "__main__":
     main()
