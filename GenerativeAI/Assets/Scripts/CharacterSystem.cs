@@ -25,6 +25,10 @@ public class CharacterSystem : MonoBehaviour
     
     [Header("Scale and Rotation")]
     public float maxScale;
+
+    [Header("ScreenShot")]
+    public GameObject uGUI;
+    public RectTransform characterWindows;
     public Vector2 cropPos;
     public Vector2 cropSize;
     void Start()
@@ -125,7 +129,10 @@ public class CharacterSystem : MonoBehaviour
     public void CaptureScreen()
     {
         string filePath = Application.streamingAssetsPath + "/ScreenShots" + string.Format("/{0}.png", System.DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
-        
+        uGUI.SetActive(false);
+        Vector2 rectPos = characterWindows.anchoredPosition;
+        characterWindows.anchoredPosition = Vector2.zero;
+        characterWindows.localScale = new Vector3(1.85f, 1.85f, 1.85f);
         // 스크린샷 해상도 설정 
         int width = 1024;
         int height = 1024;
@@ -158,5 +165,8 @@ public class CharacterSystem : MonoBehaviour
         Debug.Log(filePath);
         System.IO.File.WriteAllBytes(filePath, bytes);
         Destroy(screenShot);
+        uGUI.SetActive(true);
+        characterWindows.anchoredPosition = rectPos;
+        characterWindows.localScale = Vector2.one;
     }
 }
